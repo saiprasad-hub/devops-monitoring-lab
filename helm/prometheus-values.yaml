@@ -1,0 +1,28 @@
+# Prometheus Server Configuration
+server:
+  name: prometheus-server
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+    storageClass: "standard-rwo" # Standard GCP Block Storage (balanced)
+  
+  # Ensure the server can be reached within the cluster
+  service:
+    type: ClusterIP
+
+# Automatically install Node Exporter on every GCP Node
+prometheus-node-exporter:
+  enabled: true
+  rbac:
+    create: true
+  service:
+    type: ClusterIP
+
+# Alertmanager configuration for persistence
+alertmanager:
+  persistentVolume:
+    enabled: true
+    size: 2Gi
+    storageClass: "standard-rwo"
