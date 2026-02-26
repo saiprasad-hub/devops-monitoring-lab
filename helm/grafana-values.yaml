@@ -1,0 +1,29 @@
+# Persistence: Saves your Dashboards/Datasources to a GCP Disk
+persistence:
+  enabled: true
+  type: pvc
+  size: 5Gi
+  storageClassName: "standard-rwo"
+  accessModes:
+    - ReadWriteOnce
+
+# Service: Tells GCP to create a Public Load Balancer
+service:
+  enabled: true
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+
+# Security (Initial Login: admin / prom-operator)
+adminPassword: "prom-operator"
+
+# Automatically add Prometheus as a Data Source in Grafana
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
